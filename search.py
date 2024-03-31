@@ -42,12 +42,6 @@ class BM25:
         with open(self.index_file, "w") as file:
             json.dump(self.documents, file)
 
-    def rebuild_index(self):
-        for doc in self.documents:
-            del doc["text"]
-        self.store_documents()
-        self.index, self.idf = self.build_index()
-
     def add_document(self, url, title, text):
         tokenized_text = self.tokenize(f"{title} {text}")
         for doc in self.documents:
