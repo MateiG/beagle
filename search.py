@@ -22,7 +22,7 @@ install_nltk_data()
 nltk.data.path.append("./nltk_data")
 
 
-class BM25SearchEngine:
+class BM25:
     def __init__(self, index_file):
         self.index_file = index_file
         self.documents = self.load_documents()  # List of dictionaries
@@ -42,22 +42,28 @@ class BM25SearchEngine:
         with open(self.index_file, "w") as file:
             json.dump(self.documents, file)
 
+    def rebuild_index(self):
+        for doc in self.documents:
+            del doc["text"]
+        self.store_documents()
+        self.index, self.idf = self.build_index()
+
     def add_document(self, url, title, text):
-        text = f"{title} {text}"
+        tokenized_text = self.tokenize(f"{title} {text}")
         for doc in self.documents:
             if doc["url"] == url:
                 doc["title"] = title
-                doc["text"] = text
+                doc["tokens"] = tokenized_text
                 self.store_documents()
                 self.index, self.idf = self.build_index()
                 return
 
-        document = {"url": url, "title": title, "text": text}
+        document = {"url": url, "title": title, "tokens": tokenized_text}
         self.documents.append(document)
         self.store_documents()
         self.index, self.idf = self.build_index()
 
-    def delete_documnet(self, url):
+    def delete_document(self, url):
         self.documents = [doc for doc in self.documents if doc["url"] != url]
         self.store_documents()
         self.index, self.idf = self.build_index()
@@ -82,7 +88,7 @@ class BM25SearchEngine:
         index = {}
         df = {}
         for doc_id, doc in enumerate(self.documents):
-            terms = self.tokenize(doc["text"])
+            terms = doc["tokens"]
             term_counts = Counter(terms)
             for term, count in term_counts.items():
                 if term not in index:
@@ -99,16 +105,9 @@ class BM25SearchEngine:
 
     def compute_bm25_score(self, query, doc_id, avgdl, k1=1.5, b=0.75):
         score = 0
-        doc_length = len(self.tokenize(self.documents[doc_id]["text"]))
+        doc_length = len(self.documents[doc_id]["tokens"])
 
-        close_query_terms = []
         for term in query:
-            close_query_terms.append(
-                difflib.get_close_matches(term, self.index.keys(), n=1)[0]
-            )
-        close_query_terms = list(set(close_query_terms))
-
-        for term in close_query_terms:
             if term in self.index:
                 tf = self.index[term].get(doc_id, 0)
                 idf = self.idf.get(term, 0)
@@ -121,10 +120,14 @@ class BM25SearchEngine:
         if not self.documents:
             return []
 
-        query = self.tokenize(query_text)
-        avgdl = sum(len(self.tokenize(doc["text"])) for doc in self.documents) / len(
-            self.documents
-        )
+        close_query_terms = []
+        for term in self.tokenize(query_text):
+            close_query_terms.append(
+                difflib.get_close_matches(term, self.index.keys(), n=1)[0]
+            )
+        query = list(set(close_query_terms))
+
+        avgdl = sum(len(doc["tokens"]) for doc in self.documents) / len(self.documents)
         scores = {
             doc_id: self.compute_bm25_score(query, doc_id, avgdl)
             for doc_id in range(len(self.documents))

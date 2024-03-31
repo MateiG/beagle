@@ -5,11 +5,11 @@ from threading import Thread
 import uvicorn
 from fastapi import FastAPI, Request
 
-from search import BM25SearchEngine
+from search import BM25
 
 
 app = FastAPI()
-search_engine = BM25SearchEngine("document_index.json")
+search_engine = BM25("document_index.json")
 
 
 @app.post("/add_document")
@@ -47,7 +47,7 @@ async def delete_document(request: Request):
         raise {"status": "error", "message": "URL must be provided"}
 
     print(f"Deleting document: {url[:50]}")
-    search_engine.delete_documnet(url)
+    search_engine.delete_document(url)
     return {"status": "success"}
 
 
