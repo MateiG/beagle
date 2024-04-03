@@ -51,5 +51,18 @@ async def delete_document(request: Request):
     return {"status": "success"}
 
 
+def signal_handler(signum, frame):
+    print("Exiting...")
+    search_engine.store_documents()
+    os._exit(0)
+
+
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+    signal.signal(signal.SIGHUP, signal_handler)
+
+    try:
+        uvicorn.run(app, host="0.0.0.0", port=8000)
+    finally:
+        search_engine.store_documents()

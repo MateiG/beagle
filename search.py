@@ -25,7 +25,7 @@ nltk.data.path.append("./nltk_data")
 class BM25:
     def __init__(self, index_file):
         self.index_file = index_file
-        self.documents = self.load_documents()  # List of dictionaries
+        self.documents = self.load_documents()
         self.index, self.idf = self.build_index()
 
     def load_documents(self):
@@ -48,18 +48,15 @@ class BM25:
             if doc["url"] == url:
                 doc["title"] = title
                 doc["tokens"] = tokenized_text
-                self.store_documents()
                 self.index, self.idf = self.build_index()
                 return
 
         document = {"url": url, "title": title, "tokens": tokenized_text}
         self.documents.append(document)
-        self.store_documents()
         self.index, self.idf = self.build_index()
 
     def delete_document(self, url):
         self.documents = [doc for doc in self.documents if doc["url"] != url]
-        self.store_documents()
         self.index, self.idf = self.build_index()
 
     def tokenize(self, text):
