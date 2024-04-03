@@ -7,8 +7,6 @@ __pycache__/
 # Ignore virtual environment directories
 venv/
 
-nltk_data/
-
 .DS_Store
 
 document_index.json

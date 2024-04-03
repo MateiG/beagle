@@ -4,6 +4,7 @@ import os
 import re
 from collections import Counter
 import difflib
+import ssl
 
 import nltk
 from nltk.corpus import stopwords
@@ -11,14 +12,6 @@ from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 
 
-def install_nltk_data():
-    if not os.path.exists("./nltk_data"):
-        os.makedirs("./nltk_data")
-    nltk.download("punkt", download_dir="./nltk_data")
-    nltk.download("stopwords", download_dir="./nltk_data")
-
-
-install_nltk_data()
 nltk.data.path.append("./nltk_data")
 
 
