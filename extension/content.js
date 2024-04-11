@@ -2,16 +2,17 @@ let timeoutId = null;
 let oldText = "";
 
 function sendMessage() {
-    console.log("Beagle sending message to background");
-    message = {
-        url: window.location.href,
-        title: document.title,
-        text: document.body.innerText
-    };
-    chrome.runtime.sendMessage(message, (response) => {
-        if (chrome.runtime.lastError) {
-            console.log("Background ran into an issue" + chrome.runtime.lastError.message);
-        }
+    console.log("Beagle sending message to server")
+    message = { url: window.location.href, title: document.title, text: document.body.innerText };
+
+    fetch('http://localhost:8000/add_document', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(message)
+    }).then(response => {
+        console.log("Data received by the server");
+    }).catch(error => {
+        console.log("Error sending data to the server");
     });
 }
 
@@ -28,4 +29,5 @@ let observer = new MutationObserver((mutationsList, observer) => {
     }
 });
 
+sendMessage();
 observer.observe(document.body, { childList: true, subtree: true, characterData: true });

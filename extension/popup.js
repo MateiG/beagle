@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <strong>RESULT ${i + 1} (${result.score.toFixed(2)}):</strong>
                                 ${result.title}<br>
                                 <a href="${result.url}" target="_blank">${result.url}</a>
-                                <button class="delete-button" data-url="${result.url}" data-result-id="result-${i}">Delete</button>
+                                <button class="delete-button right-align" data-url="${result.url}" data-result-id="result-${i}">Delete</button>
                                 <hr>
                             </div>
                         `;

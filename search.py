@@ -36,7 +36,7 @@ class BM25:
             json.dump(self.documents, file)
 
     def add_document(self, url, title, text):
-        tokenized_text = self.tokenize(f"{title} {text}")
+        tokenized_text = self.tokenize(f"{url} {title} {text}")
         for doc in self.documents:
             if doc["url"] == url:
                 doc["title"] = title
@@ -110,6 +110,7 @@ class BM25:
                 difflib.get_close_matches(term, self.index.keys(), n=1)[0]
             )
         query = list(set(close_query_terms))
+        print(query)
 
         avgdl = sum(len(doc["tokens"]) for doc in self.documents) / len(self.documents)
         scores = {

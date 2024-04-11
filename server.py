@@ -4,12 +4,25 @@ from threading import Thread
 
 import uvicorn
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 
 from search import BM25
 
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+)
 search_engine = BM25("document_index.json")
+
+
+@app.get("/health")
+def health(request: Request):
+    return {"status": "ok"}
 
 
 @app.post("/add_document")
@@ -52,7 +65,7 @@ async def delete_document(request: Request):
 
 
 def signal_handler(signum, frame):
-    print("Exiting...")
+    print("Saving index...")
     search_engine.store_documents()
     os._exit(0)
 

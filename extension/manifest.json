@@ -1,18 +1,13 @@
 {
     "manifest_version": 3,
     "name": "Beagle",
-    "version": "1.0",
+    "version": "1.0.1",
     "permissions": [
-        "tabs",
-        "scripting"
+        "<all_urls>"
     ],
     "host_permissions": [
-        "https://*/*",
-        "http://*/*"
+        "http://localhost/"
     ],
-    "background": {
-        "service_worker": "background.js"
-    },
     "content_scripts": [
         {
             "matches": [
