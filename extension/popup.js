@@ -56,7 +56,6 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 if (data.status === "success") {
                     document.getElementById(resultId).remove();
-                    alert("Document deleted successfully.");
                 } else {
                     alert("Error deleting document: " + data.message);
                 }

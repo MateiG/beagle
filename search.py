@@ -118,7 +118,8 @@ class BM25:
             for doc_id in range(len(self.documents))
         }
         ranked_doc_ids = sorted(scores, key=scores.get, reverse=True)[:limit]
+        max_score = max(scores.values())
         return [
-            {**self.documents[doc_id], "score": scores[doc_id]}
+            {**self.documents[doc_id], "score": scores[doc_id] / max_score}
             for doc_id in ranked_doc_ids
         ]
