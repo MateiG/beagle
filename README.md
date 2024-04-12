@@ -15,6 +15,7 @@ Beagle is a tool that lets you locally search your browsing history.
 
 ## Usage
 
-1. Ensure the server is running in a terminal using the instructions from the installation
-2. Click on the Beagle extension icon from your browser
-3. Search!
+1. Close and reopen your browser. This lets Beagle create an index of existing tabs. Otherwise you'll only be able to search pages you visit after Beagle was installed.
+2. Ensure the server is running in a terminal using the instructions from the installation. On MacOS you can minimize the terminal window to keep it out of the way.
+3. Click on the Beagle extension icon from your browser
+4. Search!
