@@ -5,7 +5,7 @@ function sendMessage() {
     console.log("Beagle sending message to server")
     message = { url: window.location.href, title: document.title, text: document.body.innerText };
 
-    fetch('http://localhost:8000/add_document', {
+    fetch('http://localhost:4242/add_document', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(message)
