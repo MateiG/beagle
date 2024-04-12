@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function search() {
         const query = queryInput.value;
-        fetch(`http://localhost:8000/search?query=${query}`)
+        fetch(`http://localhost:4242/search?query=${query}`)
             .then(response => response.json())
             .then(data => {
                 const resultsContainer = document.getElementById('results');
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function deleteDocument(url, resultId) {
-        fetch(`http://localhost:8000/delete_document`, {
+        fetch(`http://localhost:4242/delete_document`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
