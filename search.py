@@ -110,7 +110,6 @@ class BM25:
             if close_matches:
                 close_query_terms.append(close_matches[0])
         query = list(set(close_query_terms))
-        print(query)
 
         avgdl = sum(len(doc["tokens"]) for doc in self.documents) / len(self.documents)
         scores = {
