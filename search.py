@@ -106,9 +106,9 @@ class BM25:
 
         close_query_terms = []
         for term in self.tokenize(query_text):
-            close_query_terms.append(
-                difflib.get_close_matches(term, self.index.keys(), n=1)[0]
-            )
+            close_matches = difflib.get_close_matches(term, self.index.keys(), n=1)
+            if close_matches:
+                close_query_terms.append(close_matches[0])
         query = list(set(close_query_terms))
         print(query)
 
